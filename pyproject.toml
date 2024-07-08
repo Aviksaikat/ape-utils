@@ -1,42 +1,109 @@
+[project]
+name = "ape-utils"
+dynamic = ["version"]
+description = "Utility plugin to expose some of the Ape's awesome features to CLI"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+keywords = ["ethereum"]
+authors = [
+  { name = "SAIKAT KARMAKAR", email = "github.maturity983@passinbox.com" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Natural Language :: English",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/Aviksaikat/ape-utils#readme"
+Issues = "https://github.com/Aviksaikat/ape-utils/issues"
+Source = "https://github.com/Aviksaikat/ape-utils"
+
+[tool.hatch.version]
+path = "ape_utils/__about__.py"
+
+
+
+[tool.coverage.run]
+source_pkgs = ["ape_utils", "tests"]
+branch = true
+parallel = true
+omit = [
+  "ape_utils/__about__.py",
+]
+
+[tool.coverage.paths]
+ape_utils = ["ape_utils", "*/ape-utils/ape_utils"]
+tests = ["tests", "*/ape-utils/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
+
+[tool.hatch.build.targets.wheel]
+include = ["**/*", "LICENSE", "README.md"]
+
+
+[tool.hatch.envs.default]
+dependencies = [
+    "commitizen",
+    "pre-commit",
+    "pytest-watch",
+    "IPython",
+    "ipdb",
+    "pytest>=6.0",
+    "pytest-xdist",
+    "pytest-cov",
+    "hypothesis>=6.2.0,<7.0",
+    "black>=24.4.2,<25",
+    "mypy>=1.10.0,<2",
+    "types-setuptools",
+    "types-requests",
+    "flake8>=7.0.0,<8",
+    "flake8-breakpoint>=1.1.0,<2",
+    "flake8-print>=5.0.0,<6",
+    "isort>=5.13.2,<6",
+    "mdformat>=0.7.17",
+    "mdformat-gfm>=0.3.5",
+    "mdformat-frontmatter>=0.4.1",
+    "mdformat-pyproject>=0.0.1",
+]
+
+[tool.hatch.envs.test]
+dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
+
+
+[tool.hatch.envs.lint]
+dependencies = [
+    "black", 
+    "mypy", 
+    "flake8", 
+    "isort", 
+    "types-setuptools",
+    "types-requests",
+    "flake8-breakpoint>=1.1.0",
+    "flake8-print>=5.0.0",
+    "mdformat>=0.7.17",
+    "mdformat-gfm>=0.3.5",
+    "mdformat-frontmatter>=0.4.1",
+    "mdformat-pyproject>=0.0.1",
+]
+[tool.hatch.envs.lint.scripts]
+check = "mypy --install-types --non-interactive {args:ape_utils tests}"
+
 [build-system]
-requires = ["setuptools>=51.1.1", "wheel", "setuptools_scm[toml]>=5.0"]
-
-[tool.mypy]
-exclude = "build/"
-plugins = ["pydantic.mypy"]
-
-[tool.setuptools_scm]
-write_to = "<MODULE_NAME>/version.py"
-
-# NOTE: you have to use single-quoted strings in TOML for regular expressions.
-# It's the equivalent of r-strings in Python.  Multiline strings are treated as
-# verbose regular expressions by Black.  Use [ ] to denote a significant space
-# character.
-
-[tool.black]
-line-length = 100
-target-version = ['py39', 'py310', 'py311', 'py312']
-include = '\.pyi?$'
-
-[tool.pytest.ini_options]
-addopts = """
-    -p no:ape_test
-    --cov-branch
-    --cov-report term
-    --cov-report html
-    --cov-report xml
-    --cov=<MODULE_NAME>
-"""
-python_files = "test_*.py"
-testpaths = "tests"
-markers = "fuzzing: Run Hypothesis fuzz test suite"
-
-[tool.isort]
-line_length = 100
-force_grid_wrap = 0
-include_trailing_comma = true
-multi_line_output = 3
-use_parentheses = true
-
-[tool.mdformat]
-number = true
+requires = ["hatchling"]
+build-backend = "hatchling.build"
