@@ -13,7 +13,7 @@ TODO: Description
 You can install the latest release via [`pip`](https://pypi.org/project/pip/):
 
 ```bash
-pip install <PYPI_NAME>
+pip install ape_utils
 ```
 
 ### via `setuptools`
@@ -21,9 +21,9 @@ pip install <PYPI_NAME>
 You can clone the repository and use [`setuptools`](https://github.com/pypa/setuptools) for the most up-to-date version:
 
 ```bash
-git clone https://github.com/ApeWorX/<PYPI_NAME>.git
-cd <PYPI_NAME>
-python3 setup.py install
+git clone https://github.com/Aviksaikat/ape_utils.git
+cd ape_utils
+pip install -e .
 ```
 
 ## Quick Usage
