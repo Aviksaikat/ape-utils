@@ -24,14 +24,113 @@ classifiers = [
 ]
 dependencies = []
 
+# Cli tool name & options
+[project.scripts]
+ape_call = "ape_utils._cli:main"
+
 [project.urls]
 Documentation = "https://github.com/Aviksaikat/ape-utils#readme"
 Issues = "https://github.com/Aviksaikat/ape-utils/issues"
 Source = "https://github.com/Aviksaikat/ape-utils"
 
 [tool.hatch.version]
+source = "regex_commit"
+commit_extra_args = ["-e"]
 path = "src/ape_utils/__about__.py"
 
+
+##################
+# External Tools #
+##################
+
+[tool.mypy]
+files = ["ape_utils"]
+exclude = ["build/", "dist/", "docs/", "tests/"]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+ignore_missing_imports = true
+# plugins = ["pydantic.mypy"]
+
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+indent-width = 4
+include = [
+  "src/**/*.py",
+  "src/**/*.pyi",
+  "tests/**/*.py",
+  "tests/**/*.pyi"
+]
+exclude = ["tests", "src/ape_utils/_version.py"]
+
+[tool.ruff.lint]
+preview = true # preview features & checks, use with caution
+extend-select = [ # features in preview
+    "W292", # missing-newline-at-end-of-file
+]
+select = [
+    "A",
+    "ARG",
+    "B",
+    "C",
+    "DTZ",
+    "E",
+    "EM",
+    "F",
+    "FBT", # Boolean trap
+    "ICN",
+    "ISC",
+    "I",
+    "N",
+    "PLC",
+    "PLE",
+    "PLR",
+    "PLW",
+    "Q",
+    "RUF",
+    "S",
+    "T",
+    "TID",
+    "UP",
+    "W",
+    "YTT",
+    "RUF100", # Automatically remove unused # noqa directives
+]
+ignore = [
+    # Allow non-abstract empty methods in abstract base classes
+    "B027",
+    # Allow boolean positional values in function calls, like `dict.get(... True)`
+    "FBT003",
+    # Ignore checks for possible passwords
+    "S105", "S106", "S107",
+    # Ignore complexity
+    "C901", "PLR0911", "PLR0912", "PLR0913", "PLR0915",
+    "PLC1901", # empty string comparisons
+    "PLW2901", # `for` loop variable overwritten
+    "SIM114", # Combine `if` branches using logical `or` operator
+    "E203", # Whitespace before :, needed for black compatability and also `ruff format`
+    "ISC001", # causes unexpected behaviour with formatter
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ape_utils"]
+
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+
+[tool.ruff.lint.per-file-ignores]
+# Allow print/pprint
+"examples/*" = ["T201"]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
 
 
 [tool.coverage.run]
@@ -43,8 +142,8 @@ omit = [
 ]
 
 [tool.coverage.paths]
-ape_utils = ["src/ape_utils", "*/ape-utils/ape_utils"]
-tests = ["tests", "*/ape-utils/tests"]
+ape_utils = ["src/ape_utils", "*/ape_utils/src/ape_utils"]
+tests = ["tests", "*/ape_utils/tests"]
 
 [tool.coverage.report]
 exclude_lines = [
@@ -62,57 +161,25 @@ dependencies = [
     # "eth-ape",
     "multicall",
     "click",
-    "rich"
-]
-
-[tool.hatch.envs.dev]
-dependencies = [
     "rich",
-    "multicall",
-    "click",
-    "commitizen",
-    "pre-commit",
-    "pytest-watch",
-    "IPython",
-    "ipdb",
-    "pytest>=6.0",
-    "pytest-xdist",
-    "pytest-cov",
-    "hypothesis>=6.2.0,<7.0",
-    "black>=24.4.2,<25",
-    "mypy>=1.10.0,<2",
-    "types-setuptools",
-    "types-requests",
-    "flake8>=7.0.0,<8",
-    "flake8-breakpoint>=1.1.0,<2",
-    "flake8-print>=5.0.0,<6",
-    "isort>=5.13.2,<6",
-    "mdformat>=0.7.17",
-    "mdformat-gfm>=0.3.5",
-    "mdformat-frontmatter>=0.4.1",
-    "mdformat-pyproject>=0.0.1",
 ]
 
 [tool.hatch.envs.test]
-dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis", "multicall", "click",]
-
+dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
 
 [tool.hatch.envs.lint]
-dependencies = [
-    "multicall",
-    "click",
-    "black", 
+# If you define environments with dependencies that only slightly differ from their 
+# inherited environments, you can use the extra-dependencies option to avoid redeclaring the 
+# dependencies option: https://hatch.pypa.io/latest/config/environment/overview/#dependencies
+extra-dependencies = [
     "mypy", 
-    "flake8", 
-    "isort", 
     "types-setuptools",
     "types-requests",
-    "flake8-breakpoint>=1.1.0",
-    "flake8-print>=5.0.0",
     "mdformat>=0.7.17",
     "mdformat-gfm>=0.3.5",
     "mdformat-frontmatter>=0.4.1",
     "mdformat-pyproject>=0.0.1",
+    
 ]
 [tool.hatch.envs.lint.scripts]
 # check = "mypy --install-types --non-interactive {args:ape_utils tests}"
@@ -134,5 +201,5 @@ lint-check = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-regex-commit"]
 build-backend = "hatchling.build"
