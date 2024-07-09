@@ -163,6 +163,7 @@ dependencies = [
     "click",
     "rich",
 ]
+post-install-commands = ["pre-commit install"]
 
 [tool.hatch.envs.test]
 dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
