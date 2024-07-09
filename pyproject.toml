@@ -30,20 +30,20 @@ Issues = "https://github.com/Aviksaikat/ape-utils/issues"
 Source = "https://github.com/Aviksaikat/ape-utils"
 
 [tool.hatch.version]
-path = "ape_utils/__about__.py"
+path = "src/ape_utils/__about__.py"
 
 
 
 [tool.coverage.run]
-source_pkgs = ["ape_utils", "tests"]
+source_pkgs = ["src/ape_utils", "tests"]
 branch = true
 parallel = true
 omit = [
-  "ape_utils/__about__.py",
+  "src/ape_utils/__about__.py",
 ]
 
 [tool.coverage.paths]
-ape_utils = ["ape_utils", "*/ape-utils/ape_utils"]
+ape_utils = ["src/ape_utils", "*/ape-utils/ape_utils"]
 tests = ["tests", "*/ape-utils/tests"]
 
 [tool.coverage.report]
@@ -59,12 +59,17 @@ include = ["**/*", "LICENSE", "README.md"]
 [tool.hatch.envs.default]
 installer = "uv"
 dependencies = [
-    "eth-ape",
-    "multicall"
+    # "eth-ape",
+    "multicall",
+    "click",
+    "rich"
 ]
 
 [tool.hatch.envs.dev]
 dependencies = [
+    "rich",
+    "multicall",
+    "click",
     "commitizen",
     "pre-commit",
     "pytest-watch",
@@ -89,11 +94,13 @@ dependencies = [
 ]
 
 [tool.hatch.envs.test]
-dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
+dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis", "multicall", "click",]
 
 
 [tool.hatch.envs.lint]
 dependencies = [
+    "multicall",
+    "click",
     "black", 
     "mypy", 
     "flake8", 
@@ -108,7 +115,23 @@ dependencies = [
     "mdformat-pyproject>=0.0.1",
 ]
 [tool.hatch.envs.lint.scripts]
-check = "mypy --install-types --non-interactive {args:ape_utils tests}"
+# check = "mypy --install-types --non-interactive {args:ape_utils tests}"
+typing = [
+  "echo \"VERSION: `mypy --version`\"",
+  "mypy --install-types --non-interactive src/{args}"
+]
+lint = [
+  "echo \"VERSION: `ruff --version`\"",
+  "ruff format .",
+  "ruff check . --fix",
+  "mypy src/ape_utils/",
+]
+lint-check = [
+  "echo \"VERSION: `ruff --version`\"",
+  "ruff format --check .",
+  "ruff check .",
+  "mypy src/ape_utils/"
+]
 
 [build-system]
 requires = ["hatchling"]
