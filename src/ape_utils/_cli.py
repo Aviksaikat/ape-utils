@@ -3,7 +3,7 @@ import rich_click as rclick
 from rich.console import Console
 
 from ape_utils.__about__ import __version__
-from ape_utils.utils import call_view_function
+from ape_utils.utils import call_view_function, encode_calldata_using_ape
 
 console = Console()
 
@@ -66,6 +66,24 @@ def call_view_function_from_cli(function_sig: str, address: str, args: int) -> N
 def version() -> None:
     """Show Version"""
     console.print(f"[green]Version: [yellow]{__version__}")
+
+
+@click.command(cls=rclick.RichCommand)
+@click.option(
+    "--signature",
+    help="The function signature (e.g., function_name(input param type)).",
+    required=True,
+)
+@click.argument("args", nargs=-1, type=str)
+def encode(signature: str, args: list) -> None:
+    """
+    Encodes calldata for a function given its signature and arguments.
+    """
+    try:
+        calldata = encode_calldata_using_ape(signature, *args)
+        console.print(f"[blue bold]Encoded Calldata: [green]{calldata.hex()}")
+    except Exception as e:
+        console.print(f"Error: [red]{e!s}")
 
 
 # Add commands to the CLI group
