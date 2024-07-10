@@ -26,7 +26,8 @@ dependencies = []
 
 # Cli tool name & options
 [project.scripts]
-ape_call = "ape_utils._cli:cli"
+# TODO: Make the script name ape_utils. So it can be used as ape_utils call
+ape_utils = "ape_utils._cli:cli"
 
 [project.urls]
 Documentation = "https://github.com/Aviksaikat/ape-utils#readme"
@@ -158,7 +159,8 @@ exclude_lines = [
 [tool.hatch.envs.default]
 installer = "uv"
 dependencies = [
-    # "eth-ape",
+    "eth-ape",
+    "ethpm_types",
     "multicall",
     "rich-click", # https://github.com/ewels/rich-click
     # "click",
