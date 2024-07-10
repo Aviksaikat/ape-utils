@@ -1,6 +1,13 @@
-# Quick Start
+# Ape_utils
 
-TODO: Description
+## Quick Start
+
+Ape Utils is a CLI tool designed to interact with Ethereum smart contracts, specifically focusing on calling view functions. The tool allows you to call a view function from a given function signature and address directly from the command line.
+
+## Features
+
+- **Call View Functions:** Invoke view functions on Ethereum smart contracts using their function signature and address.
+- **Flexible Input:** Provide function signature, contract address, and arguments through the command line.
 
 ## Dependencies
 
@@ -16,9 +23,9 @@ You can install the latest release via [`pip`](https://pypi.org/project/pip/):
 pip install ape_utils
 ```
 
-### via `setuptools`
+### Build locally
 
-You can clone the repository and use [`setuptools`](https://github.com/pypa/setuptools) for the most up-to-date version:
+You can clone the repository and use [`pip`](https://github.com/pypa/pip) for the most up-to-date version:
 
 ```bash
 git clone https://github.com/Aviksaikat/ape_utils.git
@@ -28,9 +35,33 @@ pip install -e .
 
 ## Quick Usage
 
-TODO: Describe library overview in code
+Once installed, you can use the ape_call command to call view functions on Ethereum smart contracts. Here is how you can use it:
+
+![help](media/help.png)
+
+```sh
+ape_call --function-sig "function_signature" --address "contract_address" --args argument
+```
+
+### Example
+
+To call a view function with the signature `call_this_view_function(uint256)(string)` on a contract at address `0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54` with an argument `6147190`, you can use:
+
+```bash
+ape_call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190
+```
+
+![working](media/working.png)
+
+## Demo
+
+![demo](media/demo.gif)
 
 ## Development
 
 Please see the [contributing guide](CONTRIBUTING.md) to learn more how to contribute to this project.
 Comments, questions, criticisms and pull requests are welcomed.
+
+## Contact
+
+For any issues or questions, please open an issue on the [GitHub repository](https://github.com/Aviksaikat/ape-utils).
