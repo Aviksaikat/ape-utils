@@ -43,12 +43,26 @@ Once installed, you can use the ape_utils command to call view functions on Ethe
 ape_utils call --function-sig "function_signature" --address "contract_address" --args argument
 ```
 
-### Example
+### Examples
+
+#### Calling a view function
 
 To call a view function with the signature `call_this_view_function(uint256)(string)` on a contract at address `0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54` with an argument `6147190`, you can use:
 
 ```bash
 ape_utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190
+```
+
+#### ABI encode the given function
+
+```sh
+ape_utils encode --signature 'call_this_view_function(uint256 arg1, string addr)' 1234 '0xdeadbeef'
+```
+
+#### Decode input data
+
+```sh
+ape_utils decode --signature 'call_this_view_function(uint256 arg1, string addr)' '0x00000000000000000000000000000000000000000000000000000000000004d20000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000a3078646561646265656600000000000000000000000000000000000000000000'
 ```
 
 ![working](media/working.png)

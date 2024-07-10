@@ -1,10 +1,13 @@
+from typing import Any
+
 import click
 import rich_click as rclick
 from rich.console import Console
+from rich.pretty import pprint
 from rich.traceback import install
 
 from ape_utils.__about__ import __version__
-from ape_utils.utils import call_view_function, encode_calldata_using_ape
+from ape_utils.utils import call_view_function, decode_calldata, encode_calldata
 
 install()
 console = Console()
@@ -77,12 +80,13 @@ def version() -> None:
     required=True,
 )
 @click.argument("args", nargs=-1, type=str)
-def encode(signature: str, args: list) -> None:
+def encode(signature: str, args: Any) -> None:
     """
     Encodes calldata for a function given its signature and arguments.
     """
     try:
-        calldata = encode_calldata_using_ape(signature, *args)
+        # Convert the args from string to appropriate types (int, string, etc.)
+        calldata = encode_calldata(signature, *args)
         console.print(f"[blue bold]Encoded Calldata: [green]{calldata.hex()}")
     except Exception as e:
         console.print(f"Error: [red]{e!s}")
@@ -90,9 +94,30 @@ def encode(signature: str, args: list) -> None:
         # raise e
 
 
+@click.command(cls=rclick.RichCommand)
+@click.option(
+    "--signature",
+    help="The function signature (e.g., function_name(input param type)).",
+    required=True,
+)
+@click.argument("calldata", type=str)
+def decode(signature: str, calldata: str) -> None:
+    """
+    Decodes calldata for a function given its signature and calldata string.
+    """
+    try:
+        decoded_data = decode_calldata(signature, calldata)
+        # * print the ouput in a single line
+        console.print("[blue bold]Decoded Data:", end="")
+        pprint(decoded_data)
+    except Exception as e:
+        console.print(f"Error: [red]{e!s}")
+
+
 # Add commands to the CLI group
 cli.add_command(call_view_function_from_cli, name="call")
 cli.add_command(encode, name="encode")
+cli.add_command(decode, name="decode")
 cli.add_command(version, name="version")
 
 if __name__ == "__main__":

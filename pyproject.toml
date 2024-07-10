@@ -26,7 +26,6 @@ dependencies = []
 
 # Cli tool name & options
 [project.scripts]
-# TODO: Make the script name ape_utils. So it can be used as ape_utils call
 ape_utils = "ape_utils._cli:cli"
 
 [project.urls]
