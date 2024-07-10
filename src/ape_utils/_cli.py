@@ -1,10 +1,12 @@
 import click
 import rich_click as rclick
 from rich.console import Console
+from rich.traceback import install
 
 from ape_utils.__about__ import __version__
 from ape_utils.utils import call_view_function, encode_calldata_using_ape
 
+install()
 console = Console()
 
 rclick.OPTION_GROUPS = {
@@ -84,10 +86,13 @@ def encode(signature: str, args: list) -> None:
         console.print(f"[blue bold]Encoded Calldata: [green]{calldata.hex()}")
     except Exception as e:
         console.print(f"Error: [red]{e!s}")
+        # TODO: Raise if debug mode is enabled
+        # raise e
 
 
 # Add commands to the CLI group
 cli.add_command(call_view_function_from_cli, name="call")
+cli.add_command(encode, name="encode")
 cli.add_command(version, name="version")
 
 if __name__ == "__main__":
