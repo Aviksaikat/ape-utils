@@ -4,6 +4,7 @@ from typing import Any, Union
 import ape
 import ethpm_types
 from ape.types import HexBytes
+from eth_utils import keccak
 from ethpm_types import MethodABI
 from multicall import Call
 from rich.console import Console
@@ -45,7 +46,7 @@ def call_view_function(function_sig: str, address: str, args: int) -> Any:
     return output
 
 
-def encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
+def abi_encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
     """
     Encodes calldata for a function given its signature and arguments using Ape.
 
@@ -67,7 +68,7 @@ def encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
                     function signature.
 
     Example:
-        >>> encode_calldata("transfer(address,uint256)", "0xRecipientAddress", 1000)
+        >>> abi_encode_calldata("call_this_view_function(uint256 arg1)", "0xRecipientAddress", 1000)
         HexBytes('0xa9059cbb000000000000000000000000RecipientAddress0000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8')
 
     Notes:
@@ -76,14 +77,13 @@ def encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
 
     """  # noqa: E501
     method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
-    console.print(f"{args=}")
     if len(method_abi.inputs) != len(args):
         msg = f"Wrong number of parameters passed. Expected: {len(method_abi.inputs)} got: {len(args)}"
         raise ValueError(msg)
     return ape.networks.ethereum.encode_calldata(method_abi, *args)
 
 
-def decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
+def abi_decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
     """
     Decodes calldata for a function given its signature and calldata string using Ape.
 
@@ -102,8 +102,9 @@ def decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
         ValueError: If the calldata is not properly formatted or if the signature is incorrect.
 
     Example:
-        >>> decode_calldata_using_ape("transfer(address,uint256)", "0xa9059cbb000000000000000000000000RecipientAddress0000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8")
-        {'recipient': '0xRecipientAddress', 'amount': 1000}
+        >>> abi_decode_calldata("call_this_view_function(uint256 arg1, string addr)"), "0x00000000000000000000000000000000000000000000000000000000000004d20000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000a3078646561646265656600000000000000000000000000000000000000000000")
+        Decoded Data: {'arg1': 1234, 'addr': '0xdeadbeef'}
+
 
     Notes:
         - The function signature should match the Solidity function format.
@@ -112,6 +113,68 @@ def decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
     """  # noqa: E501
     method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
     encoded_data_bytes: bytes = bytes.fromhex(encodeded_data[2:])
+    return ape.networks.ethereum.decode_calldata(method_abi, encoded_data_bytes)
+
+
+def encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
+    """
+    Encodes calldata for a function given its signature and arguments using the Ape framework.
+
+    This function parses the function's ABI (Application Binary Interface) from its signature,
+    verifies the number of arguments, and encodes the calldata including the function selector.
+
+    Args:
+        signature (str): The function signature in the format "function_name(input1_type,input2_type,...)".
+        args (Any): The arguments for the function call. The number of arguments must match the function's inputs.
+
+    Returns:
+        Union[HexBytes, Any]: The encoded calldata as a HexBytes object.
+
+    Raises:
+        ValueError: If the number of arguments does not match the function's inputs.
+
+    Example:
+        >>> encode_calldata("call_this_view_function(uint256 arg1)", "0xRecipientAddress", 1000)
+        HexBytes('0xa9059cbb000000000000000000000000RecipientAddress0000000000000000000000000000000000000000000000000000000000000000000000000000000000003e8')
+
+    Notes:
+        - The function signature should match the Solidity function format.
+        - The encoded calldata includes the function selector (first 4 bytes).
+    """
+    method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
+    if len(method_abi.inputs) != len(args):
+        msg = f"Wrong number of parameters passed. Expected: {len(method_abi.inputs)} got: {len(args)}"
+        raise ValueError(msg)
+    # * The selector is of 4 bytes
+    call_data = ape.networks.ethereum.encode_calldata(method_abi, *args)
+    return HexBytes(keccak(text=method_abi.selector)[:4].hex() + call_data.hex()[2:])
+
+
+def decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
+    """
+    Decodes calldata for a function given its signature and encoded data string using the Ape framework.
+
+    This function parses the function's ABI (Application Binary Interface) from its signature,
+    extracts the encoded data bytes (excluding the selector), and decodes it to its original arguments.
+
+    Args:
+        signature (str): The function signature in the format "function_name(input1_type,input2_type,...)".
+        encoded_data (str): The encoded calldata string in hex format, including the function selector.
+
+    Returns:
+        Union[dict, Any]: The decoded arguments as a dictionary or any appropriate type based on the function signature.
+
+    Example:
+        >>> decode_calldata("call_this_view_function(uint256 arg1)", "0x1e4f420d00000000000000000000000000000000000000000000000000000000000004d2")
+        Decoded Data: {'arg1': 1234}
+
+    Notes:
+        - The function signature should match the Solidity function format.
+        - The encoded calldata string should be in hex format, including the function selector.
+        - The function extracts the encoded data bytes (excluding the first 4 bytes of the selector) before decoding.
+    """  # noqa: E501
+    method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
+    encoded_data_bytes: bytes = bytes.fromhex(encodeded_data[2 + 8 :])
     return ape.networks.ethereum.decode_calldata(method_abi, encoded_data_bytes)
 
 

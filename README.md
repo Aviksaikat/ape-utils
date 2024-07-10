@@ -59,10 +59,22 @@ ape_utils call --function-sig "call_this_view_function(uint256)(string)" --addre
 ape_utils encode --signature 'call_this_view_function(uint256 arg1, string addr)' 1234 '0xdeadbeef'
 ```
 
-#### Decode input data
+#### ABI Decode input data
 
 ```sh
 ape_utils decode --signature 'call_this_view_function(uint256 arg1, string addr)' '0x00000000000000000000000000000000000000000000000000000000000004d20000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000a3078646561646265656600000000000000000000000000000000000000000000'
+```
+
+#### Encode the given function with function selector
+
+```sh
+ape_utils encode --signature "call_this_view_function(uint256 arg1)" 1234
+```
+
+#### Decode the given function with function selector
+
+```sh
+ape_utils decode --signature "call_this_view_function(uint256 arg1)" "0x1e4f420d00000000000000000000000000000000000000000000000000000000000004d2"
 ```
 
 ![working](media/working.png)
