@@ -26,7 +26,7 @@ dependencies = []
 
 # Cli tool name & options
 [project.scripts]
-ape_call = "ape_utils._cli:call_view_function_from_cli"
+ape_call = "ape_utils._cli:cli"
 
 [project.urls]
 Documentation = "https://github.com/Aviksaikat/ape-utils#readme"
