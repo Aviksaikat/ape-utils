@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## \[0.0.2\] - 2024-07-10
 
+### 🚀 Features
+
+- Added functions to Decode ABI-encoded input &  ABI encode the given function arguments
+- Implemented encode_calldata, decode_calldata functions to encode calldata for a given function signature and arguments which will use selectors & updated old encode & decode options to abi_encode & abi_decode respectively
+
+### 📚 Documentation
+
+- Changelog added
+
 ### ⚙️ Miscellaneous Tasks
 
 - Project setup & management moved to hatch
