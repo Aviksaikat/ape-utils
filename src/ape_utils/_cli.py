@@ -7,7 +7,13 @@ from rich.pretty import pprint
 from rich.traceback import install
 
 from ape_utils.__about__ import __version__
-from ape_utils.utils import call_view_function, decode_calldata, encode_calldata
+from ape_utils.utils import (
+    abi_decode_calldata,
+    abi_encode_calldata,
+    call_view_function,
+    decode_calldata,
+    encode_calldata,
+)
 
 install()
 console = Console()
@@ -80,12 +86,51 @@ def version() -> None:
     required=True,
 )
 @click.argument("args", nargs=-1, type=str)
-def encode(signature: str, args: Any) -> None:
+def abi_encode(signature: str, args: Any) -> None:
     """
-    Encodes calldata for a function given its signature and arguments.
+    Encodes calldata for a function given its signature and arguments excluding the selector.
     """
     try:
-        # Convert the args from string to appropriate types (int, string, etc.)
+        calldata = abi_encode_calldata(signature, *args)
+        console.print(f"[blue bold]Encoded Calldata: [green]{calldata.hex()}")
+    except Exception as e:
+        console.print(f"Error: [red]{e!s}")
+        # TODO: Raise if debug mode is enabled
+        # raise e
+
+
+@click.command(cls=rclick.RichCommand)
+@click.option(
+    "--signature",
+    help="The function signature (e.g., function_name(input param type)).",
+    required=True,
+)
+@click.argument("calldata", type=str)
+def abi_decode(signature: str, calldata: str) -> None:
+    """
+    Decodes calldata for a function given its signature and calldata string.
+    """
+    try:
+        decoded_data = abi_decode_calldata(signature, calldata)
+        # * print the ouput in a single line
+        console.print("[blue bold]Decoded Data: ", end="")
+        pprint(decoded_data)
+    except Exception as e:
+        console.print(f"Error: [red]{e!s}")
+
+
+@click.command(cls=rclick.RichCommand)
+@click.option(
+    "--signature",
+    help="The function signature (e.g., function_name(input param type)).",
+    required=True,
+)
+@click.argument("args", nargs=-1, type=str)
+def encode(signature: str, args: Any) -> None:
+    """
+    Encodes calldata for a function given its signature and arguments Including the selector.
+    """
+    try:
         calldata = encode_calldata(signature, *args)
         console.print(f"[blue bold]Encoded Calldata: [green]{calldata.hex()}")
     except Exception as e:
@@ -108,14 +153,16 @@ def decode(signature: str, calldata: str) -> None:
     try:
         decoded_data = decode_calldata(signature, calldata)
         # * print the ouput in a single line
-        console.print("[blue bold]Decoded Data:", end="")
+        console.print("[blue bold]Decoded Data: ", end="")
         pprint(decoded_data)
     except Exception as e:
         console.print(f"Error: [red]{e!s}")
 
 
-# Add commands to the CLI group
+# * Add commands to the CLI group
 cli.add_command(call_view_function_from_cli, name="call")
+cli.add_command(abi_encode, name="abi_encode")
+cli.add_command(abi_decode, name="abi_decode")
 cli.add_command(encode, name="encode")
 cli.add_command(decode, name="decode")
 cli.add_command(version, name="version")
