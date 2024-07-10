@@ -1,6 +1,10 @@
 import os
-from typing import Any
+from typing import Any, Union
 
+import ape
+import ethpm_types
+from ape.types import HexBytes
+from ethpm_types import MethodABI
 from multicall import Call
 from rich.console import Console
 from rich.traceback import install
@@ -39,6 +43,11 @@ def call_view_function(function_sig: str, address: str, args: int) -> Any:
 
     # console.print(f"[blue]Output: [green bold]{output}")
     return output
+
+
+def encode_calldata_using_ape(signature: str, *args: Any) -> Union[HexBytes, Any]:
+    method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
+    return ape.networks.ethereum.encode_calldata(method_abi, args)
 
 
 if __name__ == "__main__":
