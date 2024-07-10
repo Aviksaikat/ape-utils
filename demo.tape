@@ -9,9 +9,9 @@ Set WindowBar Colorful
 Set Framerate 60
 
 
-Type "ape_call --help"
+Type "ape_utils --help"
 Enter 1
 Sleep 2s
-Type "ape_call call --function-sig 'call_this_view_function(uint256)(string)' --address '0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54' --args 6147190"
+Type "ape_utils call --function-sig 'call_this_view_function(uint256)(string)' --address '0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54' --args 6147190"
 Enter 1
 Sleep 10s
