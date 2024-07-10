@@ -40,7 +40,7 @@ Once installed, you can use the ape_call command to call view functions on Ether
 ![help](media/help.png)
 
 ```sh
-ape_call --function-sig "function_signature" --address "contract_address" --args argument
+ape_call call --function-sig "function_signature" --address "contract_address" --args argument
 ```
 
 ### Example
@@ -48,7 +48,7 @@ ape_call --function-sig "function_signature" --address "contract_address" --args
 To call a view function with the signature `call_this_view_function(uint256)(string)` on a contract at address `0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54` with an argument `6147190`, you can use:
 
 ```bash
-ape_call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190
+ape_call call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190
 ```
 
 ![working](media/working.png)
