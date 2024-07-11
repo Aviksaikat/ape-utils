@@ -3,6 +3,7 @@ from typing import Any, Union
 
 import ape
 import ethpm_types
+from ape.api import SubprocessProvider
 from ape.types import HexBytes
 from eth_utils import keccak
 from ethpm_types import MethodABI
@@ -16,7 +17,7 @@ install()
 console = Console()
 
 
-def call_view_function(function_sig: str, address: str, args: int) -> Any:
+def call_view_function(function_sig: str, address: str, args: int, provider: SubprocessProvider) -> Any:
     """
     Calls a view function on the blockchain given a function signature and address.
 
@@ -25,9 +26,10 @@ def call_view_function(function_sig: str, address: str, args: int) -> Any:
     and returns the result of the call.
 
     Parameters:
-    - function_sig (str): The function signature, including the input and output types, e.g., "gsr_query(uint256)(string)".
+    - function_sig (str): The function signature, including the input and output types, e.g., "some_func(uint256)(string)".
     - address (str): The address of the smart contract.
     - args (int): The arguments for the function call.
+    - provider (SubprocessProvider): The subprocess provider i.e. alchemy, infura, foundry, ganache etc.
 
     Returns:
     - Any: The result of the function call.
@@ -183,4 +185,4 @@ if __name__ == "__main__":
     address: str = "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54"
     args = 6147190
 
-    call_view_function(function_sig, address, args)
+    # call_view_function(function_sig, address, args)
