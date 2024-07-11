@@ -1,8 +1,13 @@
+import logging
+import sys
 from typing import Any
 
 import click
 import rich_click as rclick
+from ape.api import SubprocessProvider
+from ape.cli import ConnectedProviderCommand, network_option
 from rich.console import Console
+from rich.logging import RichHandler
 from rich.pretty import pprint
 from rich.traceback import install
 
@@ -17,6 +22,10 @@ from ape_utils.utils import (
 
 install()
 console = Console()
+FORMAT = "%(message)s"
+logging.basicConfig(level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+
+log = logging.getLogger("rich")
 
 rclick.OPTION_GROUPS = {
     "ape_utils": [
@@ -54,7 +63,7 @@ def cli() -> None:
     pass
 
 
-@click.command(cls=rclick.RichCommand)
+@click.command(cls=ConnectedProviderCommand)
 @click.option(
     "--function-sig",
     required=True,
@@ -62,12 +71,17 @@ def cli() -> None:
 )
 @click.option("--address", required=True, help="The address of the smart contract.")
 @click.option("--args", required=True, help="The arguments for the function call.", type=int)
-def call_view_function_from_cli(function_sig: str, address: str, args: int) -> None:
+@network_option(default="ethereum:local:node", required=True)
+def call_view_function_from_cli(function_sig: str, address: str, args: int, provider: SubprocessProvider) -> None:  # type: ignore
     """
     Calls a view function on the blockchain given a function signature and address.
     """
     try:
-        output = call_view_function(function_sig, address, args)
+        console.print(provider)
+        if provider.is_connected:
+            log.error("Process already running!")
+            sys.exit(-1)
+        output = call_view_function(function_sig, address, args, provider)
         console.print(f"[blue bold]Output: [green]{output}")
     except Exception as e:
         console.print(f"Error: [red]{e!s}")
