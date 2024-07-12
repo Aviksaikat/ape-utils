@@ -1,10 +1,9 @@
-import os
 from typing import Any, Union
 
 import ape
 import ethpm_types
-from ape.api import SubprocessProvider
 from ape.types import HexBytes
+from ape_node.provider import Node
 from eth_utils import keccak
 from ethpm_types import MethodABI
 from multicall import Call
@@ -17,7 +16,7 @@ install()
 console = Console()
 
 
-def call_view_function(function_sig: str, address: str, args: int, provider: SubprocessProvider) -> Any:
+def call_view_function(function_sig: str, address: str, args: int, provider: Node) -> Any:
     """
     Calls a view function on the blockchain given a function signature and address.
 
@@ -38,7 +37,7 @@ def call_view_function(function_sig: str, address: str, args: int, provider: Sub
     >>> result = call_view_function("call_this_view_function(uint256)(string)", "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54", 6147190)
     >>> print(result)
     """  # noqa: E501
-    w3 = Web3(Web3.HTTPProvider(os.environ["sepoliafork"]))
+    w3 = Web3(Web3.HTTPProvider(provider.uri))
 
     # get_signature(address, function_sig)
 

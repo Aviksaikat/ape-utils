@@ -1,0 +1,82 @@
+# Project information
+site_name: ape utils
+site_description: Utility plugin to expose some of the Ape's awesome features to CLI Resources
+site_author: Saikat Karmakar
+site_url: https://github.com/Aviksaikat/ape-utils
+copyright: 'Copyright &copy; Saikat Karmakar 2024-present'
+
+# Repository
+repo_url: https://github.com/Aviksaikat/ape-utils
+repo_name: Aviksaikat/ape-utils
+
+theme:
+    name: material
+    font:
+        text: Roboto
+        code: Roboto Mono
+    icon:
+        logo: material/library
+    palette:
+        # Palette toggle for automatic mode
+        - media: "(prefers-color-scheme)"
+          toggle:
+            icon: material/brightness-auto
+            name: Switch to light mode
+
+        # Palette toggle for light mode
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          primary: red
+          accent: red
+          toggle:
+            icon: material/brightness-7
+            name: Switch to dark mode
+
+        # Palette toggle for dark mode
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          primary: red
+          accent: red
+          toggle:
+            icon: material/brightness-4
+            name: Switch to light mode
+
+markdown_extensions:
+    - toc:
+        permalink: true
+    - pymdownx.highlight:
+        anchor_linenums: true
+    - pymdownx.tasklist:
+        custom_checkbox: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences
+
+plugins:
+    - search
+    - mkdocstrings:
+        handlers:
+            python:
+                import:
+                    - https://docs.python.org/{{ cookiecutter.python_version }}/objects.inv
+                options:
+                    docstring_style: google
+    - gen-files:
+        scripts:
+            - docs/scripts/gen_ref_nav.py
+
+watch:
+    - docs
+    - src
+
+# Navigation
+nav:
+    - Home:
+        - About: index.md
+        - Changelog: changelog.md
+        - License: license.md
+        - Authors: authors.md
+        - Contributing: contributing.md
+    - Reference:
+        - ape_utils: reference/ape_utils.md
+        - Examples: examples.md
