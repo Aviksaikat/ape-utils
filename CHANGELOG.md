@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 - Added functions to Decode ABI-encoded input &  ABI encode the given function arguments
 - Implemented encode_calldata, decode_calldata functions to encode calldata for a given function signature and arguments which will use selectors & updated old encode & decode options to abi_encode & abi_decode respectively
+- Added option to pass network and provider using ape's native network parsing. added docs workflows
 
 ### 📚 Documentation
 
