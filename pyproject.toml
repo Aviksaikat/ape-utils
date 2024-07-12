@@ -158,17 +158,12 @@ exclude_lines = [
 [tool.hatch.envs.default]
 installer = "uv"
 dependencies = [
-    "eth-ape",
+    "eth-ape", # will use ape 0.8.5 for now because of py-geth version issue
     "ethpm_types",
     "multicall",
     "rich-click", # https://github.com/ewels/rich-click
-    # "click",
-    # "rich",
 ]
 post-install-commands = ["pre-commit install"]
-
-[tool.hatch.envs.test]
-dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
 
 [tool.hatch.envs.lint]
 # If you define environments with dependencies that only slightly differ from their
@@ -191,10 +186,12 @@ typing = [
   "mypy --install-types --non-interactive src/{args}"
 ]
 lint = [
-  "echo \"VERSION: `ruff --version`\"",
+  "echo \"ruff VERSION: `ruff --version`\"",
   "ruff format .",
   "ruff check . --fix",
   "mypy src/ape_utils/",
+  "echo \"mdformat VERSION: `mdformat --version`\"",
+  "mdformat ."
 ]
 lint-check = [
   "echo \"VERSION: `ruff --version`\"",
@@ -203,10 +200,17 @@ lint-check = [
   "mypy src/ape_utils/"
 ]
 
+[tool.hatch.envs.test]
+extra-dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
+
+[tool.hatch.envs.test.scripts]
+test = "pytest"
+test-cov-xml = "pytest --cov-report=xml"
 
 # Replace tox & nox
 [[tool.hatch.envs.test.matrix]]
 python = ["3.9", "3.10", "3.11", "3.12"]
+# python = ["3.9"]
 
 [build-system]
 requires = ["hatchling", "hatch-regex-commit"]

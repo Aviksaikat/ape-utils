@@ -4,6 +4,10 @@
 
 Ape Utils is a CLI tool designed to interact with Ethereum smart contracts, specifically focusing on calling view functions. The tool allows you to call a view function from a given function signature and address directly from the command line.
 
+## Demo
+
+![demo](media/demo.gif)
+
 ## Features
 
 - **Call View Functions:** Invoke view functions on Ethereum smart contracts using their function signature and address.
@@ -78,10 +82,6 @@ ape_utils decode --signature "call_this_view_function(uint256 arg1)" "0x1e4f420d
 ```
 
 ![working](media/working.png)
-
-## Demo
-
-![demo](media/demo.gif)
 
 ## Development
 

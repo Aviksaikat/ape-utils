@@ -6,7 +6,8 @@ import rich_click as rclick
 from ape.cli import ConnectedProviderCommand, network_option
 from ape_node.provider import Node
 from rich.console import Console
-from rich.logging import RichHandler
+
+# from rich.logging import RichHandler
 from rich.pretty import pprint
 from rich.traceback import install
 
@@ -22,7 +23,7 @@ from ape_utils.utils import (
 install()
 console = Console()
 FORMAT = "%(message)s"
-logging.basicConfig(level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
+# logging.basicConfig(level="WARN", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()])
 
 log = logging.getLogger("rich")
 
