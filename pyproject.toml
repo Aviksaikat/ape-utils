@@ -36,7 +36,7 @@ Source = "https://github.com/Aviksaikat/ape-utils"
 [tool.hatch.version]
 source = "regex_commit"
 commit_extra_args = ["-e"]
-path = "src/ape_utils/__about__.py"
+path = "src/ape_utils/__version__.py"
 
 
 ##################
@@ -138,7 +138,7 @@ source_pkgs = ["src/ape_utils", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/ape_utils/__about__.py",
+  "src/ape_utils/__version__.py",
 ]
 
 [tool.coverage.paths]

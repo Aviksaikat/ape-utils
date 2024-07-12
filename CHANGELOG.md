@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## \[0.0.2\] - 2024-07-10
+## \[0.0.3\] - 2024-07-12
 
 ### 🚀 Features
 
@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - Changelog added
+- Changelogs updated
+- Updated demo.gif
+- Readme updated
 
 ### ⚙️ Miscellaneous Tasks
 

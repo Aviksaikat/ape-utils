@@ -1,17 +1,16 @@
 import logging
-import sys
 from typing import Any
 
 import click
 import rich_click as rclick
-from ape.api import SubprocessProvider
 from ape.cli import ConnectedProviderCommand, network_option
+from ape_node.provider import Node
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.pretty import pprint
 from rich.traceback import install
 
-from ape_utils.__about__ import __version__
+from ape_utils.__version__ import version
 from ape_utils.utils import (
     abi_decode_calldata,
     abi_encode_calldata,
@@ -55,7 +54,7 @@ rclick.COMMAND_GROUPS = {
 
 
 @click.group(cls=rclick.RichGroup)
-@click.version_option(version=__version__, prog_name="ape_utils")
+@click.version_option(version=version, prog_name="ape_utils")
 def cli() -> None:
     """
     Ape Utils CLI tool for calling view functions on Ethereum smart contracts.
@@ -72,25 +71,19 @@ def cli() -> None:
 @click.option("--address", required=True, help="The address of the smart contract.")
 @click.option("--args", required=True, help="The arguments for the function call.", type=int)
 @network_option(default="ethereum:local:node", required=True)
-def call_view_function_from_cli(function_sig: str, address: str, args: int, provider: SubprocessProvider) -> None:  # type: ignore
+def call_view_function_from_cli(function_sig: str, address: str, args: int, provider: Node) -> None:
     """
     Calls a view function on the blockchain given a function signature and address.
+    How this function is identifying the network ?
+    Read here: https://docs.apeworx.io/ape/stable/userguides/clis.html#network-tools. Using ape's native network parsing
     """
     try:
-        console.print(provider)
-        if provider.is_connected:
-            log.error("Process already running!")
-            sys.exit(-1)
+        # console.print(provider.web3.provider)
+        # console.print(dir(provider.web3))
         output = call_view_function(function_sig, address, args, provider)
         console.print(f"[blue bold]Output: [green]{output}")
     except Exception as e:
         console.print(f"Error: [red]{e!s}")
-
-
-@click.command(cls=rclick.RichCommand)
-def version() -> None:
-    """Show Version"""
-    console.print(f"[green]Version: [yellow]{__version__}")
 
 
 @click.command(cls=rclick.RichCommand)
@@ -179,7 +172,6 @@ cli.add_command(abi_encode, name="abi_encode")
 cli.add_command(abi_decode, name="abi_decode")
 cli.add_command(encode, name="encode")
 cli.add_command(decode, name="decode")
-cli.add_command(version, name="version")
 
 if __name__ == "__main__":
     call_view_function_from_cli()
