@@ -200,6 +200,28 @@ lint-check = [
   "mypy src/ape_utils/"
 ]
 
+# Docs env dendencies
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs",
+  "mkdocs-material",
+  "mkdocs-gen-files",
+  "mkdocstrings[python]",
+  "linkchecker",
+  "ape_utils @ {root:uri}/"
+]
+
+[tool.hatch.envs.docs.scripts]
+docs-serve = "mkdocs serve"
+docs-build = "mkdocs build --clean --strict"
+# --ignore-url=None since the SUMMARY.md file leaves a <toc>None</toc> in sitemap.xml
+validate = "linkchecker --ignore-url=/reference --ignore-url=None site"
+# https://github.com/linkchecker/linkchecker/issues/678
+build-check = [
+  "docs-build",
+  "validate",
+]
+
 [tool.hatch.envs.test]
 extra-dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
 
