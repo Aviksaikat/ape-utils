@@ -171,13 +171,12 @@ post-install-commands = ["pre-commit install"]
 # dependencies option: https://hatch.pypa.io/latest/config/environment/overview/#dependencies
 extra-dependencies = [
     "mypy",
-    "types-setuptools",
-    "types-requests",
+    "ruff",
+    "commitizen",
     "mdformat>=0.7.17",
     "mdformat-gfm>=0.3.5",
     "mdformat-frontmatter>=0.4.1",
     "mdformat-pyproject>=0.0.1",
-
 ]
 [tool.hatch.envs.lint.scripts]
 # check = "mypy --install-types --non-interactive {args:ape_utils tests}"
@@ -191,7 +190,9 @@ lint = [
   "ruff check . --fix",
   "mypy src/ape_utils/",
   "echo \"mdformat VERSION: `mdformat --version`\"",
-  "mdformat ."
+  "mdformat .",
+  "echo \"check VERSION: `check --version`\"",
+  "cz check --rev-range $(git rev-list --all --reverse | head -1)..HEAD"
 ]
 lint-check = [
   "echo \"VERSION: `ruff --version`\"",
