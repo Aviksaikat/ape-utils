@@ -76,7 +76,7 @@ nav:
         - Changelog: changelog.md
         - License: license.md
         - Authors: authors.md
-        - Contributing: contributing.md
+        - Contributing: CONTRIBUTING.md
     - Reference:
         - ape_utils: reference/ape_utils.md
         - Examples: examples.md
