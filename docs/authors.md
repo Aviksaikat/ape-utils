@@ -1,1 +1,1 @@
---8\<-- "AUTHORS.md"
+--8<-- "AUTHORS.md"

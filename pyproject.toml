@@ -190,7 +190,7 @@ lint = [
   "ruff check . --fix",
   "mypy src/ape_utils/",
   "echo \"mdformat VERSION: `mdformat --version`\"",
-  "mdformat .",
+  "mdformat README.md docs/examples.md",
   "echo \"check VERSION: `check --version`\"",
   "cz check --rev-range $(git rev-list --all --reverse | head -1)..HEAD"
 ]
