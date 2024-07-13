@@ -57,6 +57,13 @@ To call a view function with the signature `call_this_view_function(uint256)(str
 ape_utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190 --network :sepolia:infura
 ```
 
+### Use as ape plugin
+
+```bash
+ape utils --help
+ape utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190 --network :sepolia:infura
+```
+
 #### ABI encode the given function
 
 ```sh
