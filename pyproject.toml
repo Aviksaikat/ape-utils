@@ -29,18 +29,22 @@ dependencies = [
   "rich-click", # https://github.com/ewels/rich-click
 ]
 
+
 # Cli tool name & options
 [project.scripts]
 ape_utils = "ape_utils._cli:cli"
+
 
 # Make it work with cli like ape call, ape abi_encode etc.
 [project.entry-points.ape_cli_subcommands]
 ape_utils = "ape_utils._cli:cli"
 
+
 [project.urls]
 Documentation = "https://github.com/Aviksaikat/ape-utils#readme"
 Issues = "https://github.com/Aviksaikat/ape-utils/issues"
 Source = "https://github.com/Aviksaikat/ape-utils"
+
 
 [tool.hatch.version]
 source = "regex_commit"
@@ -77,6 +81,7 @@ include = [
   "tests/**/*.pyi"
 ]
 exclude = ["tests", "src/ape_utils/_version.py"]
+
 
 [tool.ruff.lint]
 preview = true # preview features & checks, use with caution
@@ -127,6 +132,7 @@ ignore = [
     "ISC001", # causes unexpected behaviour with formatter
 ]
 
+
 [tool.ruff.lint.isort]
 known-first-party = ["ape_utils"]
 
@@ -150,9 +156,11 @@ omit = [
   "src/ape_utils/__version__.py",
 ]
 
+
 [tool.coverage.paths]
 ape_utils = ["src/ape_utils", "*/ape_utils/src/ape_utils"]
 tests = ["tests", "*/ape_utils/tests"]
+
 
 [tool.coverage.report]
 exclude_lines = [
@@ -161,13 +169,12 @@ exclude_lines = [
   "if TYPE_CHECKING:",
 ]
 
-# [tool.hatch.build.targets.wheel]
-# include = ["**/*", "LICENSE", "README.md"]
 
 [tool.hatch.envs.default]
 installer = "pip"
 # dependencies = []
 post-install-commands = ["pre-commit install"]
+
 
 [tool.hatch.envs.lint]
 # If you define environments with dependencies that only slightly differ from their
@@ -182,6 +189,8 @@ extra-dependencies = [
     "mdformat-frontmatter>=0.4.1",
     "mdformat-pyproject>=0.0.1",
 ]
+
+
 [tool.hatch.envs.lint.scripts]
 # check = "mypy --install-types --non-interactive {args:ape_utils tests}"
 typing = [
@@ -205,6 +214,7 @@ lint-check = [
   "mypy src/ape_utils/"
 ]
 
+
 # Docs env dendencies
 [tool.hatch.envs.docs]
 dependencies = [
@@ -215,6 +225,7 @@ dependencies = [
   "linkchecker",
   "ape_utils @ {root:uri}/"
 ]
+
 
 [tool.hatch.envs.docs.scripts]
 docs-serve = "mkdocs serve"
@@ -227,28 +238,34 @@ build-check = [
   "validate",
 ]
 
+
 [tool.hatch.envs.test]
 extra-dependencies = ["pytest", "pytest-xdist", "pytest-cov", "hypothesis"]
+
 
 [tool.hatch.envs.test.scripts]
 test = "pytest"
 test-cov-xml = "pytest --cov-report=xml"
+
 
 [tool.pytest.ini_options]
 addopts = "-p no:ape_test"
 python_files = "test_*.py"
 testpaths = "tests"
 
+
 # Replace tox & nox
 [[tool.hatch.envs.test.matrix]]
 python = ["3.9", "3.10", "3.11", "3.12"]
 # python = ["3.9"]
+
 
 # Build configs
 [tool.hatch.build.targets.sdist]
 include = [
   "src/**/*.py",
 ]
+
 
 [build-system]
 requires = ["hatchling", "hatch-regex-commit"]
