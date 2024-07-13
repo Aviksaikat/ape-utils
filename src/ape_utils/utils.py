@@ -57,12 +57,10 @@ def abi_encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
 
     Args:
         signature (str): The function signature in the format "function_name(input1_type,input2_type,...)".
-        *args (Any): The arguments to be encoded for the function call. The number and types of arguments must match
-                     the function signature.
+        *args (Any): The arguments to be encoded for the function call. The number and types of arguments must match the function signature.
 
     Returns:
-        Union[HexBytes, Any]: The encoded calldata in hex bytes format, which can be used for making a blockchain
-                              transaction or call.
+        Union[HexBytes, Any]: The encoded calldata in hex bytes format, which can be used for making a blockchain transaction or call.
 
     Raises:
         ValueError: If the number of provided arguments does not match the expected number of inputs according to the
@@ -84,7 +82,7 @@ def abi_encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
     return ape.networks.ethereum.encode_calldata(method_abi, *args)
 
 
-def abi_decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
+def abi_decode_calldata(signature: str, encoded_data: str) -> Union[dict, Any]:
     """
     Decodes calldata for a function given its signature and calldata string using Ape.
 
@@ -94,7 +92,7 @@ def abi_decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]
 
     Args:
         signature (str): The function signature in the format "function_name(input1_type,input2_type,...)".
-        calldata (str): The calldata string to be decoded.
+        encoded_data (str): The encoded_data string to be decoded.
 
     Returns:
         Union[dict, Any]: The decoded arguments as a dictionary or any appropriate type based on the function signature.
@@ -113,7 +111,7 @@ def abi_decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]
 
     """  # noqa: E501
     method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
-    encoded_data_bytes: bytes = bytes.fromhex(encodeded_data[2:])
+    encoded_data_bytes: bytes = bytes.fromhex(encoded_data[2:])
     return ape.networks.ethereum.decode_calldata(method_abi, encoded_data_bytes)
 
 
@@ -126,7 +124,7 @@ def encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
 
     Args:
         signature (str): The function signature in the format "function_name(input1_type,input2_type,...)".
-        args (Any): The arguments for the function call. The number of arguments must match the function's inputs.
+        *args (Any): The arguments for the function call. The number of arguments must match the function's inputs.
 
     Returns:
         Union[HexBytes, Any]: The encoded calldata as a HexBytes object.
@@ -151,7 +149,7 @@ def encode_calldata(signature: str, *args: Any) -> Union[HexBytes, Any]:
     return HexBytes(keccak(text=method_abi.selector)[:4].hex() + call_data.hex()[2:])
 
 
-def decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
+def decode_calldata(signature: str, encoded_data: str) -> Union[dict, Any]:
     """
     Decodes calldata for a function given its signature and encoded data string using the Ape framework.
 
@@ -175,7 +173,7 @@ def decode_calldata(signature: str, encodeded_data: str) -> Union[dict, Any]:
         - The function extracts the encoded data bytes (excluding the first 4 bytes of the selector) before decoding.
     """  # noqa: E501
     method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
-    encoded_data_bytes: bytes = bytes.fromhex(encodeded_data[2 + 8 :])
+    encoded_data_bytes: bytes = bytes.fromhex(encoded_data[2 + 8 :])
     return ape.networks.ethereum.decode_calldata(method_abi, encoded_data_bytes)
 
 
