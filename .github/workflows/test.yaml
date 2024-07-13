@@ -16,7 +16,8 @@ jobs:
    strategy:
      matrix:
        os: [ubuntu-latest, macos-latest]
-       python-version: ["3.9", "3.10", "3.11"]
+       # * Don't need to run on all versions as hatch matrix will do the job
+       python-version: ["3.9"]
    steps:
     - uses: actions/checkout@v4
     - name: Set up Python
