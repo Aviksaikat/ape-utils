@@ -12,7 +12,7 @@ Set Framerate 60
 Type "ape_utils --help"
 Enter 1
 Sleep 3s
-Type "ape_utils call --function-sig 'call_this_view_function(uint256)(string)' --address '0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54' --args 6147190 --network :sepolia:infura"
+Type "ape_utils call --function-sig 'call_this_view_function(uint256)(string)' --address '0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54' --args [6147190] --network :sepolia:infura"
 Enter 1
 Sleep 5s
 Type "# Run as ape plugin"
