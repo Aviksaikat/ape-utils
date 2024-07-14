@@ -44,7 +44,7 @@ Once installed, you can use the ape_utils command to call view functions on Ethe
 ![help](media/help.png)
 
 ```sh
-ape_utils call --function-sig "function_signature" --address "contract_address" --args argument --network [ecosystem-name][:[network-name][:[provider-name]]]
+ape_utils call --function-sig "function_signature" --address "contract_address" --args [argument] --network [ecosystem-name][:[network-name][:[provider-name]]]
 ```
 
 ### Examples
@@ -55,7 +55,7 @@ To call a view function with the signature `call_this_view_function(uint256)(str
 
 ```bash
 # function which takes a single input parameter
-ape_utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190 --network :sepolia:infura
+ape_utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args '[6147190]' --network :sepolia:infura
 ```
 
 #### Calling a view function with multiple parameter
@@ -74,7 +74,7 @@ ape_utils call --function-sig 'multiple_param_function(uint256,string,address)(s
 
 ```bash
 ape utils --help
-ape utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args 6147190 --network :sepolia:infura
+ape utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args '[6147190]' --network :sepolia:infura
 ```
 
 #### ABI encode the given function
