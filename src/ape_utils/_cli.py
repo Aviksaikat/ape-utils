@@ -1,3 +1,4 @@
+import ast
 import logging
 from typing import Any
 
@@ -54,6 +55,15 @@ rclick.COMMAND_GROUPS = {
 }
 
 
+class PythonLiteralOption(click.Option):
+    @classmethod
+    def type_cast_value(cls, _: Any, value: Any) -> Any:
+        try:
+            return ast.literal_eval(value)
+        except:  # noqa: E722
+            raise click.BadParameter(value)  # noqa: B904
+
+
 @click.group(cls=rclick.RichGroup)
 @click.version_option(version=version, prog_name="ape_utils")
 def cli() -> None:
@@ -70,21 +80,23 @@ def cli() -> None:
     help="The function signature (e.g., function_name(input param type)(output param type)).",
 )
 @click.option("--address", required=True, help="The address of the smart contract.")
-@click.option("--args", required=True, help="The arguments for the function call.", type=int)
+@click.option("--args", required=True, help="The arguments for the function call.", cls=PythonLiteralOption)
 @network_option(default="ethereum:local:node", required=True)
-def call_view_function_from_cli(function_sig: str, address: str, args: int, provider: Node) -> None:
+def call_view_function_from_cli(function_sig: str, address: str, args: str, provider: Node) -> None:
     """
     Calls a view function on the blockchain given a function signature and address.
-    How this function is identifying the network ?
-    Read here: https://docs.apeworx.io/ape/stable/userguides/clis.html#network-tools. Using ape's native network parsing
+    Using ape's native network parsing.
     """
     try:
         # console.print(provider.web3.provider)
         # console.print(dir(provider.web3))
-        output = call_view_function(function_sig, address, args, provider)
+        parsed_args = list(args)
+        # console.print(f"{parsed_args=}")
+        output = call_view_function(function_sig, address, parsed_args, provider)
         console.print(f"[blue bold]Output: [green]{output}")
     except Exception as e:
         console.print(f"Error: [red]{e!s}")
+        raise e
 
 
 @click.command(cls=rclick.RichCommand)
