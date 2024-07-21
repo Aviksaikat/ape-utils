@@ -56,6 +56,8 @@ To call a view function with the signature `call_this_view_function(uint256)(str
 ```bash
 # function which takes a single input parameter
 ape_utils call --function-sig "call_this_view_function(uint256)(string)" --address "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" --args '[6147190]' --network :sepolia:infura
+# or
+ape utils call -s "call_this_view_function(uint256)(string)" -a "0x80E097a70cacA11EB71B6401FB12D48A1A61Ef54" -ag '[6147190]' --network :sepolia:infura
 ```
 
 #### Calling a view function with multiple parameter
@@ -99,6 +101,20 @@ ape_utils encode --signature "call_this_view_function(uint256 arg1)" 1234
 
 ```sh
 ape_utils decode --signature "call_this_view_function(uint256 arg1)" "0x1e4f420d00000000000000000000000000000000000000000000000000000000000004d2"
+```
+
+#### Don't want beautiful print statements ?
+
+You can now pass the `--raw` flag to each option to print the output data only
+
+```sh
+ape_utils encode --signature 'isLastFloor(uint256 arg1)' 1234 --raw
+```
+
+#### Read storage slots of a contract
+
+```sh
+ape utils read --address "0xDbB18e367E4A2A36A9F2AF7af8b3c743938deCF2" --slot 1 --network :sepolia
 ```
 
 ![working](media/working.png)
