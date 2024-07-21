@@ -2,11 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.5] - 2024-07-14
+## [0.0.6] - 2024-07-21
 
 ### 🚀 Features
 
 - Functions with multiple parameters can be called using the call method
+- Added option to read contract storage from slot using the read method
 
 ### 🐛 Bug Fixes
 
@@ -15,6 +16,7 @@ All notable changes to this project will be documented in this file.
 ### ⚙️ Miscellaneous Tasks
 
 - Pyblish workflow updated
+- Demo.tape & gitignore updated
 
 ## [0.0.4] - 2024-07-13
 

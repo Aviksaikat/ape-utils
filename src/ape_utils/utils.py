@@ -2,7 +2,8 @@ from typing import Any, Union
 
 import ape
 import ethpm_types
-from ape.types import HexBytes
+from ape import networks
+from ape.types import AddressType, HexBytes
 from ape_node.provider import Node
 from eth_utils import keccak
 from ethpm_types import MethodABI
@@ -180,6 +181,47 @@ def decode_calldata(signature: str, encoded_data: str) -> Union[dict, Any]:
     method_abi: MethodABI = ethpm_types.abi.MethodABI.from_signature(signature)
     encoded_data_bytes: bytes = bytes.fromhex(encoded_data[2 + 8 :])
     return ape.networks.ethereum.decode_calldata(method_abi, encoded_data_bytes)
+
+
+def read_storage(address: Union[AddressType, str], slot: int) -> Any:
+    """
+    Gets the raw value of a storage slot of a contract.
+
+    This function interacts with the blockchain to read the storage data of a
+    specified contract address at a given storage slot. It uses the provider
+    from the Ape framework to fetch the storage data.
+
+    Args:
+        address (Union[AddressType, str]): The address of the smart contract whose storage
+            data is to be read. This should be a valid Ethereum address.
+        slot (int): The storage slot number from which to read the data. This
+            should be a non-negative integer representing the position in the
+            contract's storage.
+
+    Returns:
+        Any: The data stored at the specified storage slot of the given address.
+            The return type can vary depending on the data stored at the slot.
+
+    Example:
+        >>> address = "0x1234567890abcdef1234567890abcdef12345678"
+        >>> slot = 5
+        >>> data = read_storage(address, slot)
+        >>> print(data)
+
+    Notes:
+        - This function requires a connection to an Ethereum network through
+          the Ape framework.
+        - Ensure that the address and slot provided are valid and exist in the
+          context of the smart contract's storage.
+
+    Raises:
+        ValueError: If the provided address or slot is invalid.
+        ConnectionError: If there is an issue connecting to the Ethereum network.
+
+    """
+    data = networks.provider.get_storage(address, slot)
+
+    return data
 
 
 if __name__ == "__main__":

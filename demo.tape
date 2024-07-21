@@ -28,4 +28,10 @@ Enter 1
 Sleep 3s
 Type "ape_utils decode --signature 'call_this_view_function(uint256 arg1)' '0x1e4f420d00000000000000000000000000000000000000000000000000000000000004d2'"
 Enter 1
+Sleep 2s
+Type "ape utils read --address '0xDbB18e367E4A2A36A9F2AF7af8b3c743938deCF2' --slot 1 --network :sepolia"
+Enter 1
+Sleep 8s
+Type "ape_utils encode --signature 'call_this_view_function(uint256 arg1)' 1234 --raw"
+Enter 1
 Sleep 10s
